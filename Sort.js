@@ -59,41 +59,95 @@ class Sort {
     else if (arrLen === 2) {
       if (array[0] > array[1]) this.swap(array, 0, 1)
       return array
-    } else {
-      // Divide array
-      const middle = Math.floor(array.length / 2)
-      const leftArray = array.slice(0, middle)
-      const rightArray = array.slice(middle, array.length)
-      const leftArrLen = leftArray.length
-      const rightArrLen = rightArray.length
+    }
 
-      // Sort each half
-      this.mergeSort(leftArray)
-      this.mergeSort(rightArray)
+    // Divide array
+    const middle = Math.floor(array.length / 2)
+    const leftArray = array.slice(0, middle)
+    const rightArray = array.slice(middle, array.length)
+    // const leftArrLen = leftArray.length
+    // const rightArrLen = rightArray.length
 
-      // Merge arrays
-      let leftArrIndex = 0
-      let rightArrIndex = 0
-      for (let i = 0; i < array.length; i++) {
-        if (leftArrIndex === leftArrLen) array[i] = rightArray[rightArrIndex++]
-        else if (rightArrIndex === rightArrLen) array[i] = leftArray[leftArrIndex++]
-        else if (leftArray[leftArrIndex] > rightArray[rightArrIndex]) array[i] = rightArray[rightArrIndex++]
-        else array[i] = leftArray[leftArrIndex++]
+    // Sort each half
+    this.mergeSort(leftArray)
+    this.mergeSort(rightArray)
+
+    // Merge arrays
+    // let leftArrIndex = 0
+    // let rightArrIndex = 0
+    // for (let i = 0; i < array.length; i++) {
+    //   if (leftArrIndex === leftArrLen) array[i] = rightArray[rightArrIndex++]
+    //   else if (rightArrIndex === rightArrLen) array[i] = leftArray[leftArrIndex++]
+    //   else if (leftArray[leftArrIndex] > rightArray[rightArrIndex]) array[i] = rightArray[rightArrIndex++]
+    //   else array[i] = leftArray[leftArrIndex++]
+    // }
+
+    this.mergeArrays(leftArray, rightArray, array)
+  }
+
+  mergeArrays(leftArray, rightArray, resultArray) {
+    const leftArrLen = leftArray.length
+    const rightArrLen = rightArray.length
+
+    // Merge arrays
+    let leftArrIndex = 0
+    let rightArrIndex = 0
+    for (let i = 0; i < resultArray.length; i++) {
+      if (leftArrIndex === leftArrLen) resultArray[i] = rightArray[rightArrIndex++]
+      else if (rightArrIndex === rightArrLen) resultArray[i] = leftArray[leftArrIndex++]
+      else if (leftArray[leftArrIndex] > rightArray[rightArrIndex]) resultArray[i] = rightArray[rightArrIndex++]
+      else resultArray[i] = leftArray[leftArrIndex++]
+    }
+  }
+
+  quickSort(array) {
+    const arrLen = array.length
+    if (arrLen < 2) return
+    else if (arrLen === 2) {
+      if (array[0] > array[1]) this.swap(array, 0, 1)
+      return
+    }
+
+    this.quickSortPrivate(array, 0, array.length)
+  }
+
+  quickSortPrivate(array, start, end) {
+    if (end === start) return
+
+    const boundry = this.partition(array, start, end)
+
+    // sort left and right side of pivot
+    this.quickSortPrivate(array, start, boundry)
+    this.quickSortPrivate(array, boundry + 1, end)
+  }
+
+  partition(array, start, end) {
+    let boundry = start - 1
+    const pivot = array[end - 1] // select last item as pivot
+
+    for (let i = start; i < end; i++) {
+      if (array[i] <= pivot) {
+        boundry++
+        if (boundry !== i) this.swap(array, i, boundry)
       }
     }
+
+    return boundry
   }
 }
 
 const sort = new Sort()
 // const testArray = [8, 2, 1]
-const testArray = [8, 2, 1, 6, 5]
+// const testArray = [8, 2, 1, 6, 5]
 // const testArray = [8, 1, 2, 1, 6, 5]
 // const testArray = [1, 1, 2, 3, 3, 4]
 // const testArray = [9, 8, 7, 6, 5, 4]
+const testArray = [22, 6, 3, 1, 15, 10, 13, 1, 13]
 
 // sort.bubbleSort(testArray)
 // sort.selectionSort(testArray)
 // sort.insertionSort(testArray)
-sort.mergeSort(testArray)
+// sort.mergeSort(testArray)
+sort.quickSort(testArray)
 
 console.log("Sorted array:", testArray)
