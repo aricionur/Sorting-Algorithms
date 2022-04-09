@@ -148,21 +148,55 @@ class Sort {
       }
     }
   }
+
+  bucketSort(array) {
+    const numOfBuckets = 3
+    const buckets = []
+    let minValue = array[0]
+    let maxValue = array[0]
+
+    for (const item of array) {
+      if (item > maxValue) maxValue = item
+      if (item < minValue) minValue = item
+    }
+    const range = (maxValue - minValue) / numOfBuckets
+
+    for (let i = 0; i < numOfBuckets; i++) buckets.push([]) // put empty array buckets
+
+    // put items into corresponding bucket
+    for (const item of array) {
+      let bucketNo = Math.floor((item - minValue) / range)
+      if (bucketNo > numOfBuckets - 1) bucketNo = numOfBuckets - 1
+
+      buckets[bucketNo].push(item)
+    }
+
+    // sort buckets internally
+    for (const bucket of buckets) this.quickSort(bucket)
+
+    // insert bucket items into array in sorted
+    let arrayIndex = 0
+    for (const bucket of buckets) {
+      for (const item of bucket) array[arrayIndex++] = item
+    }
+  }
 }
 
 const sort = new Sort()
+
 // const testArray = [8, 2, 1]
 // const testArray = [8, 2, 1, 6, 5]
 // const testArray = [8, 1, 2, 1, 6, 5]
 // const testArray = [1, 1, 2, 3, 3, 4]
 // const testArray = [9, 8, 7, 6, 5, 4]
 // const testArray = [22, 6, 3, 1, 15, 10, 13, 1, 13]
-
+const testArray = [22, 6, 3, 1, 15, 10, 13, 1, 13, 55, 56, 57, -1, -5, -99, -250]
 // sort.bubbleSort(testArray)
 // sort.selectionSort(testArray)
 // sort.insertionSort(testArray)
 // sort.mergeSort(testArray)
 // sort.quickSort(testArray)
-sort.countSort(testArray)
+// sort.countSort(testArray)
+sort.bucketSort(testArray)
 
 console.log("Sorted array:", testArray)

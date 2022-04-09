@@ -7,3 +7,5 @@
 - Insertion Sort
 - Merge Sort
 - Quick Sort
+- Counting Sort
+- Bucket Sort
