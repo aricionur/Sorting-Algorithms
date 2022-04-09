@@ -52,13 +52,48 @@ class Sort {
       array[j + 1] = current
     }
   }
+
+  mergeSort(array) {
+    const arrLen = array.length
+    if (arrLen < 2) return array
+    else if (arrLen === 2) {
+      if (array[0] > array[1]) this.swap(array, 0, 1)
+      return array
+    } else {
+      // Divide array
+      const middle = Math.floor(array.length / 2)
+      const leftArray = array.slice(0, middle)
+      const rightArray = array.slice(middle, array.length)
+      const leftArrLen = leftArray.length
+      const rightArrLen = rightArray.length
+
+      // Sort each half
+      this.mergeSort(leftArray)
+      this.mergeSort(rightArray)
+
+      // Merge arrays
+      let leftArrIndex = 0
+      let rightArrIndex = 0
+      for (let i = 0; i < array.length; i++) {
+        if (leftArrIndex === leftArrLen) array[i] = rightArray[rightArrIndex++]
+        else if (rightArrIndex === rightArrLen) array[i] = leftArray[leftArrIndex++]
+        else if (leftArray[leftArrIndex] > rightArray[rightArrIndex]) array[i] = rightArray[rightArrIndex++]
+        else array[i] = leftArray[leftArrIndex++]
+      }
+    }
+  }
 }
 
 const sort = new Sort()
-const testArray = [8, 2, 1, 6, 5, 4]
+// const testArray = [8, 2, 1]
+const testArray = [8, 2, 1, 6, 5]
+// const testArray = [8, 1, 2, 1, 6, 5]
+// const testArray = [1, 1, 2, 3, 3, 4]
+// const testArray = [9, 8, 7, 6, 5, 4]
 
 // sort.bubbleSort(testArray)
 // sort.selectionSort(testArray)
-sort.insertionSort(testArray)
+// sort.insertionSort(testArray)
+sort.mergeSort(testArray)
 
-console.log(testArray)
+console.log("Sorted array:", testArray)
