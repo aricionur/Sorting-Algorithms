@@ -72,16 +72,6 @@ class Sort {
     this.mergeSort(leftArray)
     this.mergeSort(rightArray)
 
-    // Merge arrays
-    // let leftArrIndex = 0
-    // let rightArrIndex = 0
-    // for (let i = 0; i < array.length; i++) {
-    //   if (leftArrIndex === leftArrLen) array[i] = rightArray[rightArrIndex++]
-    //   else if (rightArrIndex === rightArrLen) array[i] = leftArray[leftArrIndex++]
-    //   else if (leftArray[leftArrIndex] > rightArray[rightArrIndex]) array[i] = rightArray[rightArrIndex++]
-    //   else array[i] = leftArray[leftArrIndex++]
-    // }
-
     this.mergeArrays(leftArray, rightArray, array)
   }
 
@@ -134,6 +124,30 @@ class Sort {
 
     return boundry
   }
+
+  countSort(array) {
+    const arrLen = array.length
+    if (arrLen < 2) return
+
+    // items have to be positive and integer numbers for this sort method !!!
+    let maxValue = 0
+    for (let i = 0; i < arrLen; i++) if (array[i] > maxValue) maxValue = array[i]
+
+    // build Counter array
+    const countingArray = []
+    for (let i = 0; i <= maxValue; i++) countingArray.push(0)
+
+    // calculate item frequencies
+    for (let i = 0; i < arrLen; i++) countingArray[array[i]] += 1
+
+    // put elements into array in sorted
+    let currentArrayIndex = 0
+    for (let i = 0; i < countingArray.length; i++) {
+      if (countingArray[i]) {
+        for (let j = 0; j < countingArray[i]; j++) array[currentArrayIndex++] = i
+      }
+    }
+  }
 }
 
 const sort = new Sort()
@@ -142,12 +156,13 @@ const sort = new Sort()
 // const testArray = [8, 1, 2, 1, 6, 5]
 // const testArray = [1, 1, 2, 3, 3, 4]
 // const testArray = [9, 8, 7, 6, 5, 4]
-const testArray = [22, 6, 3, 1, 15, 10, 13, 1, 13]
+// const testArray = [22, 6, 3, 1, 15, 10, 13, 1, 13]
 
 // sort.bubbleSort(testArray)
 // sort.selectionSort(testArray)
 // sort.insertionSort(testArray)
 // sort.mergeSort(testArray)
-sort.quickSort(testArray)
+// sort.quickSort(testArray)
+sort.countSort(testArray)
 
 console.log("Sorted array:", testArray)
